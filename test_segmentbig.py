@@ -4,7 +4,7 @@ from machine import I2C, Pin, RTC
 from ht16k33segmentbig import HT16K33SegmentBig
 
 # CONSTANTS
-DELAY = 0.01
+#DELAY = 0.01
 PAUSE = 3
 
 # START
@@ -18,7 +18,7 @@ if __name__ == '__main__':
     display.set_character("2", digit=1)
     display.set_character("3", digit=2)
     display.set_character("4", digit=3)
-    # display.set_colon(0x02)
+    display.set_colon(0x00)
     # display.set_colon(0x04)
     # display.set_colon(0x08)
     # display.set_colon(0x10)

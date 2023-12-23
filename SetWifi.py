@@ -7,28 +7,27 @@ class SetWifi:
 
     def __init__(self):
 
-        self.wlan = None
+        # Get secrets
         with open("./secrets.json") as jsonFile:
-            secrets_info = json.load(jsonFile)
+            self.secrets_info = json.load(jsonFile)
             jsonFile.close()
-        for secrets in secrets_info["secrets"]:
-            if secrets["id"] == 0:
-                self.ssid = secrets["ssid"]
-                self.password = secrets["password"]
-        self.time_out = secrets_info["time_out"]
-        self.max_tries = secrets_info["max_tries"]
 
-    def open_wifi(self):
+        # init WIFI
         self.wlan = network.WLAN(network.STA_IF)
         self.wlan.active(True)
-        self.wlan.connect(self.ssid, self.password)
+
+    def try_connecting_wifi(self):
+        for secrets in self.secrets_info["secrets"]:
+            if not self.is_connected():
+                self.open_wifi(secrets["ssid"], secrets["password"])
+
+    def open_wifi(self, ssid, password):
+        self.wlan.connect(ssid, password)
         count = 0
         while True:
-            time.sleep(self.time_out)
-            if count == self.max_tries and not self.is_connected():
-                return False
-            elif self.is_connected():
-                return True
+            time.sleep(self.secrets_info["time_out"])
+            if count > self.secrets_info["max_tries"] or self.is_connected():
+                break
             count += 1
 
     def is_connected(self):
