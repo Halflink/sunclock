@@ -1,6 +1,8 @@
 from SetWifi import SetWifi
-from TimeHandler import TimeHandler
+from RealTimeClockAPI import TimeHandler
 from DisplayHandler import DisplayHandler
+from OLEDHandler import OLEDHandler
+from NeopixelHandler import NeopixelHandler
 import json as json
 
 
@@ -12,13 +14,25 @@ class Main:
             self.settings = json.load(jsonFile)
             jsonFile.close()
 
+        # set OLED
+        self.oledHandler = OLEDHandler(self.settings["oled"])
+
         # set WIFI
-        self.wifi = SetWifi()
+        self.wifi = SetWifi(self.oledHandler)
         self.wifi.try_connecting_wifi()
+
         if self.wifi.is_connected():
+            self.oledHandler.enable_wifi_image()
+
+            # set clock
             self.timeHandler = TimeHandler(self.settings["rtc_url"])
-            self.displayHandler = DisplayHandler()
+            self.displayHandler = DisplayHandler(self.settings["segment_display"])
+
+            # set sunclock
+            self.neopixelHandler = NeopixelHandler(self.settings)
         else:
+            self.oledHandler.set_line_1("NO WIFI")
+            self.oledHandler.set_line_2("CONNECTED")
             print("Not connected")
 
 
@@ -26,6 +40,7 @@ if __name__ == '__main__':
     main = Main()
     while True:
         main.displayHandler.evaluate_display()
+
 
 
 

@@ -1,3 +1,28 @@
 {
-  "rtc_url": "http://worldtimeapi.org/api/timezone/Europe/Amsterdam"
+  "rtc_url": "http://worldtimeapi.org/api/timezone/Europe/Amsterdam",
+  "oled": {
+    "width": 128,
+    "height": 32,
+    "i2c_id": 0,
+    "scl": 9,
+    "sda": 8,
+    "frequency": 200000
+  },
+  "segment_display": {
+    "i2c_id": 1,
+    "scl": 19,
+    "sda": 18,
+    "address": "0x71",
+    "brightness": 10
+  },
+  "sunrise_sunset_api": {
+    "url": "https://api.sunrise-sunset.org/json",
+    "params": {
+      "lat": "51.69064188879774",
+      "lng": "5.295865449574199",
+      "date": "today",
+      "formatted": "0",
+      "tzId": "Europe/Amsterdam"
+    }
+  }
 }

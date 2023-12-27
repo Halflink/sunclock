@@ -5,7 +5,10 @@ import time
 
 class SetWifi:
 
-    def __init__(self):
+    def __init__(self, oledHandler):
+
+        # CONSTANTS
+        self.oledHandler = oledHandler
 
         # Get secrets
         with open("./secrets.json") as jsonFile:
@@ -17,9 +20,17 @@ class SetWifi:
         self.wlan.active(True)
 
     def try_connecting_wifi(self):
+        self.oledHandler.set_line_1("Init WIFI")
         for secrets in self.secrets_info["secrets"]:
             if not self.is_connected():
+                self.oledHandler.set_line_2(secrets["ssid"])
                 self.open_wifi(secrets["ssid"], secrets["password"])
+        if self.is_connected():
+            self.oledHandler.set_line_1("")
+            self.oledHandler.set_line_2("")
+            i = self.wlan.ifconfig()
+            self.oledHandler.set_line_3(i[0])
+            print(i[0])
 
     def open_wifi(self, ssid, password):
         self.wlan.connect(ssid, password)
@@ -34,10 +45,3 @@ class SetWifi:
         return self.wlan.isconnected()
 
 
-if __name__ == '__main__':
-    setWifi = SetWifi()
-    connected = setWifi.open_wifi()
-    if connected:
-        print("Connection succesful")
-    else:
-        print("Connection unsuccesful")

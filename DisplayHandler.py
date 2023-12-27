@@ -5,7 +5,7 @@ from ht16k33segmentbig import HT16K33SegmentBig
 
 class DisplayHandler:
 
-    def __init__(self):
+    def __init__(self, settings):
 
         # CONSTANTS
         self.last_colon_evaluation = time.time()
@@ -15,9 +15,10 @@ class DisplayHandler:
         self.colon_state = False
 
         # DISPLKAY
-        i2c = I2C(1, scl=Pin(19), sda=Pin(18))  # Raspberry Pi Pico
-        self.display = HT16K33SegmentBig(i2c, 0x71)
-        self.display.set_brightness(10)
+        i2c = I2C(settings["i2c_id"], scl=settings["scl"], sda=settings["sda"])  # Raspberry Pi Pico
+        address = int(settings["address"], 16)
+        self.display = HT16K33SegmentBig(i2c, address)
+        self.display.set_brightness(settings["brightness"])
 
     @staticmethod
     def get_current_time_string():
