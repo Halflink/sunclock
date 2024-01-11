@@ -2,9 +2,9 @@ from SetWifi import SetWifi
 from RealTimeClockAPI import TimeHandler
 from DisplayHandler import DisplayHandler
 from OLEDHandler import OLEDHandler
-from NeopixelHandler import NeopixelHandler
+from Sunclock import Sunclock
 import json as json
-
+import time
 
 class Main:
 
@@ -29,7 +29,7 @@ class Main:
             self.displayHandler = DisplayHandler(self.settings["segment_display"])
 
             # set sunclock
-            self.neopixelHandler = NeopixelHandler(self.settings)
+            self.sunclock = Sunclock(self.settings)
         else:
             self.oledHandler.set_line_1("NO WIFI")
             self.oledHandler.set_line_2("CONNECTED")
@@ -40,6 +40,8 @@ if __name__ == '__main__':
     main = Main()
     while True:
         main.displayHandler.evaluate_display()
+        time_int = time.time() - (60*60*5)
+        main.sunclock.process_sun_clock(time_int)
 
 
 

@@ -9,7 +9,10 @@ class SunriseSunsetAPI:
         self.params = settings["params"]
 
     def get_sunrise_sunset(self):
-        response = requests.get(self.url, params=self.params)
+        url = "{}?lat={}&lng={}&date={}&formatted={}&tzId={}".format(self.url, self.params["lat"], self.params["lng"],
+                                                                     self.params["date"], self.params["formatted"],
+                                                                     self.params["tzId"])
+        response = requests.get(url)
         if 200 <= response.status_code < 300:
             return response.json()
         else:

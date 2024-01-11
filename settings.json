@@ -24,5 +24,12 @@
       "formatted": "0",
       "tzId": "Europe/Amsterdam"
     }
+  },
+  "neopixel": {
+    "num_leds":  30,
+    "state_machine": 0,
+    "gpio_pin": 28,
+    "mode": "GRB",
+    "brightness": 10
   }
 }
