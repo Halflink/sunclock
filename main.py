@@ -6,6 +6,7 @@ from Sunclock import Sunclock
 import json as json
 import time
 
+
 class Main:
 
     def __init__(self):
@@ -39,8 +40,8 @@ class Main:
 if __name__ == '__main__':
     main = Main()
     while True:
-        main.displayHandler.evaluate_display()
-        time_int = time.time() - (60*60*5)
+        time_int = time.time() - (60 * 60 * 5)
+        main.displayHandler.set_display_with_time(time_int)
         main.sunclock.process_sun_clock(time_int)
 
 

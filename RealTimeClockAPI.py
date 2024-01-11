@@ -39,15 +39,6 @@ class TimeHandler:
         if not self.is_set_rtc_successful or  time_dif > 86400:
             self.set_rtc()
 
-    @staticmethod
-    def get_current_time_string():
-        time_now = time.localtime()
-        hour = str(time_now[3])
-        hour = '0' * max(0, 2 - len(hour)) + hour
-        minute = str(time_now[4])
-        minute = '0' * max(0, 2 - len(minute)) + minute
-        current_time = hour + minute
-        return current_time
 
 
 

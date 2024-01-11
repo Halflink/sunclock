@@ -5,13 +5,11 @@ from ht16k33segmentbig import HT16K33SegmentBig
 
 class DisplayHandler:
 
-    def __init__(self, settings):
+    def __init__(self, settings, time_int):
 
         # CONSTANTS
-        self.last_colon_evaluation = time.time()
-        self.last_time_evaluation = time.time() - 60
-
-        self.current_time_string = "0000"
+        self.last_colon_evaluation = time_int
+        self.last_time_evaluation = time_int - 60
         self.colon_state = False
 
         # DISPLKAY
@@ -19,6 +17,16 @@ class DisplayHandler:
         address = int(settings["address"], 16)
         self.display = HT16K33SegmentBig(i2c, address)
         self.display.set_brightness(settings["brightness"])
+
+    @staticmethod
+    def get_time_string(time_int):
+        time_now = time.localtime(time_int)
+        hour = str(time_now[3])
+        hour = '0' * max(0, 2 - len(hour)) + hour
+        minute = str(time_now[4])
+        minute = '0' * max(0, 2 - len(minute)) + minute
+        current_time = hour + minute
+        return current_time
 
     def toggle_colon(self):
         if self.colon_state:
@@ -28,21 +36,20 @@ class DisplayHandler:
             self.colon_state = True
             self.display.set_colon(0x02)
 
-    def set_display(self, time_string):
-        current_time = time.time()
-        colon_diff = current_time - self.last_colon_evaluation
-        time_diff = current_time - self.last_time_evaluation
+    def set_display_with_time(self, time_int):
+        colon_diff = time_int - self.last_colon_evaluation
+        time_diff = time_int - self.last_time_evaluation
         if colon_diff >= 1:
             self.toggle_colon()
-            self.last_colon_evaluation = current_time
+            self.last_colon_evaluation = time_int
             self.display.draw()
         if time_diff >= 60:
-            current_time_string = self.get_current_time_string()
-            self.display.set_character(current_time_string[0:1], digit=0)
-            self.display.set_character(current_time_string[1:2], digit=1)
-            self.display.set_character(current_time_string[2:3], digit=2)
-            self.display.set_character(current_time_string[3:4], digit=3)
-            self.last_time_evaluation = current_time
+            time_string = self.get_time_string(time_int)
+            self.display.set_character(time_string[0:1], digit=0)
+            self.display.set_character(time_string[1:2], digit=1)
+            self.display.set_character(time_string[2:3], digit=2)
+            self.display.set_character(time_string[3:4], digit=3)
+            self.last_time_evaluation = time_int
             self.display.draw()
 
 
