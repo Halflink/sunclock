@@ -8,6 +8,11 @@ on which I can
 show the temperature and humidity.</p>
 
 ---
+## WORKINGS
+When you connect the device to a power source using the USB connector the clock will start up and try to connect to the internet.
+It loops through the connections found in 
+
+---
 ## PARTS
  
 ### ELECTRONICS
@@ -24,7 +29,7 @@ clock ;)
 sensor Make sure you use the DHT22 and not the DHT11.
 - 1 4K7 resistor
 
-### 3 PRINTS
+### 3D PRINTS
 
 - 
 

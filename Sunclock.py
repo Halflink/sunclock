@@ -24,12 +24,6 @@ class Sunclock:
         self.neopixelHandler = NeopixelHandler(settings["neopixel"])
 
     @staticmethod
-    def make_time(time_string):
-        time_int = time.mktime((int(time_string[0:4]), int(time_string[5:7]), int(time_string[8:10]),
-                                int(time_string[11:13]), int(time_string[14:16]), int(time_string[17:19]), 0, 0))
-        return time_int
-
-    @staticmethod
     def calc_pixel_number(start_time, end_time, duration_per_pixel):
         return int((end_time - start_time) / duration_per_pixel)
 
@@ -52,13 +46,13 @@ class Sunclock:
         self.dawn_duration_per_pixel = int((self.sunrise - self.civil_twilight_begin) / self.neopixelHandler.numpix)
         self.day_duration_per_pixel = int((self.sunset - self.sunrise) / self.neopixelHandler.numpix)
 
-    def set_times(self):
+    def set_times(self, timeHandler):
         response = self.sunriseSunsetAPI.get_sunrise_sunset()
         if response is not None:
-            self.sunrise = self.make_time(response["results"]["sunrise"])
-            self.sunset = self.make_time(response["results"]["sunset"])
-            self.civil_twilight_begin = self.make_time(response["results"]["civil_twilight_begin"])
-            self.civil_twilight_end = self.make_time(response["results"]["civil_twilight_end"])
+            self.sunrise = timeHandler.make_time(response["results"]["sunrise"])
+            self.sunset = timeHandler.make_time(response["results"]["sunset"])
+            self.civil_twilight_begin = timeHandler.make_time(response["results"]["civil_twilight_begin"])
+            self.civil_twilight_end = timeHandler.make_time(response["results"]["civil_twilight_end"])
             self.calc_pixel_durations()
             self.print_times()
 
@@ -68,11 +62,11 @@ class Sunclock:
             self.current_pixel = pixel_number
             print("time: {}:{}".format(time.gmtime(time_int)[3], time.gmtime(time_int)[4]))
 
-    def process_sun_clock(self, time_int):
+    def calculate_sun_clock_pixels(self, time_int, timeHandler):
 
         # get sunset times from API
         if self.civil_twilight_end is None or self.civil_twilight_end < time_int:
-            self.set_times()
+            self.set_times(timeHandler)
 
         # dawn / day / dusk / night
         if self.civil_twilight_begin <= time_int < self.sunrise:

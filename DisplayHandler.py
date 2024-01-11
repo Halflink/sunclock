@@ -18,16 +18,6 @@ class DisplayHandler:
         self.display = HT16K33SegmentBig(i2c, address)
         self.display.set_brightness(settings["brightness"])
 
-    @staticmethod
-    def get_time_string(time_int):
-        time_now = time.localtime(time_int)
-        hour = str(time_now[3])
-        hour = '0' * max(0, 2 - len(hour)) + hour
-        minute = str(time_now[4])
-        minute = '0' * max(0, 2 - len(minute)) + minute
-        current_time = hour + minute
-        return current_time
-
     def toggle_colon(self):
         if self.colon_state:
             self.colon_state = False
@@ -36,7 +26,7 @@ class DisplayHandler:
             self.colon_state = True
             self.display.set_colon(0x02)
 
-    def set_display_with_time(self, time_int):
+    def set_display_with_time(self, time_int, timeHandler):
         colon_diff = time_int - self.last_colon_evaluation
         time_diff = time_int - self.last_time_evaluation
         if colon_diff >= 1:
@@ -44,7 +34,7 @@ class DisplayHandler:
             self.last_colon_evaluation = time_int
             self.display.draw()
         if time_diff >= 60:
-            time_string = self.get_time_string(time_int)
+            time_string = timeHandler.get_time_string(time_int)
             self.display.set_character(time_string[0:1], digit=0)
             self.display.set_character(time_string[1:2], digit=1)
             self.display.set_character(time_string[2:3], digit=2)
