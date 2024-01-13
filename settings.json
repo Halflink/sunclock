@@ -1,5 +1,8 @@
 {
-  "rtc_url": "http://worldtimeapi.org/api/timezone/Europe/Amsterdam",
+  "rtc": {
+    "url": "http://worldtimeapi.org/api/timezone/Europe/Amsterdam",
+    "evaluate_interval": 86400
+  },
   "oled": {
     "width": 128,
     "height": 32,
@@ -31,5 +34,8 @@
     "gpio_pin": 28,
     "mode": "GRB",
     "brightness": 10
+  },
+  "DHT22": {
+    "pin": 22
   }
 }

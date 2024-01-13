@@ -21,13 +21,13 @@ class SetWifi:
 
     def try_connecting_wifi(self):
         self.oledHandler.set_line_1("Init WIFI")
+        self.oledHandler.set_line_2("Try SSID:")
         for secrets in self.secrets_info["secrets"]:
             if not self.is_connected():
-                self.oledHandler.set_line_2(secrets["ssid"])
+                self.oledHandler.set_line_3(secrets["ssid"])
                 self.open_wifi(secrets["ssid"], secrets["password"])
         if self.is_connected():
-            self.oledHandler.set_line_1("")
-            self.oledHandler.set_line_2("")
+            self.oledHandler.clear_lines()
             i = self.wlan.ifconfig()
             self.oledHandler.set_line_3(i[0])
             print(i[0])

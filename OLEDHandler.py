@@ -8,8 +8,8 @@ class OLEDHandler:
     def __init__(self, settings):
         # CONSTANTS
         wifi_image = bytearray(
-            b'\x00?\xfc\x00\x01\xff\xfe\x00\x07\x80\x07\x80\x1c\x00\x00\xe0\x00\x00\x00\x00\x00\x0f\xc0\x00\x00?\xf0\x00\x00\xf0<\x00\x01\x80\x06\x00\x00\x00\x00\x00\x00\x07\x80\x00\x00\x1f\xe0\x00\x008p\x00\x00`\x18\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x03\x00\x00\x00\x07\x80\x00\x00\x03\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00')
-        self.frame_buffer = framebuf.FrameBuffer(wifi_image, 32, 32, framebuf.MONO_HLSB)
+            b'\x0f\xf0|~\xe0\x07\x00\x00\x07\xe0\x0ep8\x1c\x00\x00\x03\xc0\x07\xe0\x0c0\x00\x00\x00\x00\x01\x80\x03\xc0\x01\x80')
+        self.frame_buffer = framebuf.FrameBuffer(wifi_image, 16, 16, framebuf.MONO_HLSB)
         degrees_image = bytearray(b'`\x90\x90`\x00\x00\x00\x00')
         self.frame_buffer_line_1 = framebuf.FrameBuffer(degrees_image, 8, 8, framebuf.MONO_HLSB)
         self.line1 = ""
@@ -39,22 +39,31 @@ class OLEDHandler:
         self.show_frame_buffer = False
         self.render_oled()
 
+    def set_line(self, text):
+        self.set_line_1(text[0:12])
+        if len(text) > 12:
+            self.set_line_2(text[12:24])
+
     def set_line_1(self, text):
-        self.line1 = text[0:11]
+        self.line1 = text[0:12]
         self.render_oled()
 
     def set_line_2(self, text):
-        self.line2 = text[0:11]
+        self.line2 = text[0:12]
         self.render_oled()
 
     def set_line_3(self, text):
         self.line3 = text[0:16]
         self.render_oled()
 
+    def clear_lines(self):
+        self.set_line_1("")
+        self.set_line_2("")
+
     def render_oled(self):
         self.oled.fill(0)
         if self.show_frame_buffer:
-            self.oled.blit(self.frame_buffer, 96, 0)
+            self.oled.blit(self.frame_buffer, 112, 0)
         self.oled.text(self.line1, 5, 2)
         if self.show_frame_buffer_line_1:
             self.oled.blit(self.frame_buffer_line_1, 40, 2)

@@ -26,11 +26,12 @@ class Main:
             self.oledHandler.enable_wifi_image()
 
             # set clock
-            self.timeHandler = TimeHandler(self.settings["rtc_url"], self.oledHandler)
-            self.displayHandler = DisplayHandler(self.settings["segment_display"])
+            self.timeHandler = TimeHandler(self.settings["rtc"], self.oledHandler)
+            time_int = time.time()
+            self.displayHandler = DisplayHandler(self.settings["segment_display"], time_int)
 
             # set sunclock
-            self.sunclock = Sunclock(self.settings)
+            self.sunclock = Sunclock(self.settings, self.oledHandler)
         else:
             self.oledHandler.set_line_1("NO WIFI")
             self.oledHandler.set_line_2("CONNECTED")
@@ -44,7 +45,7 @@ if __name__ == '__main__':
             time_int = time.time()
             main.displayHandler.set_display_with_time(time_int, main.timeHandler)
             main.sunclock.calculate_sun_clock_pixels(time_int, main.timeHandler)
-            main.timeHandler.evaluate_rtc(time_int)
+            main.timeHandler.evaluate_rtc(time_int, main.oledHandler)
 
 
 

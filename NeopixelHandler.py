@@ -24,17 +24,26 @@ class NeopixelHandler:
 
     def set_day(self, pixel):
         self.clear_pixels()
-        self.pixels.set_pixel_line_gradient(max(0, pixel-2), pixel, self.orange, self.yellow)
+        if pixel == 0:
+            self.pixels.set_pixel(pixel, self.yellow)
+        else:
+            self.pixels.set_pixel_line_gradient(max(0, pixel-2), pixel, self.orange, self.yellow)
         self.pixels.show()
 
     def set_dawn(self, pixel):
         self.clear_pixels()
-        self.pixels.set_pixel_line_gradient(0, min(pixel, self.numpix-1), self.white, self.blue)
+        if pixel == 0:
+            self.pixels.set_pixel(pixel, self.blue)
+        else:
+            self.pixels.set_pixel_line_gradient(0, min(pixel, self.numpix-1), self.white, self.blue)
         self.pixels.show()
 
     def set_dusk(self, pixel):
         self.clear_pixels()
-        self.pixels.set_pixel_line_gradient(max(pixel, 0), self.numpix-1, self.blue, self.white)
+        if pixel == 0:
+            self.pixels.set_pixel(pixel, self.white)
+        else:
+            self.pixels.set_pixel_line_gradient(max(pixel, 0), self.numpix-1, self.blue, self.white)
         self.pixels.show()
 
     def clear_pixels(self):
