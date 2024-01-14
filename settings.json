@@ -36,6 +36,7 @@
     "brightness": 10
   },
   "DHT22": {
-    "pin": 22
+    "pin": 22,
+    "measurement_interval": 5
   }
 }

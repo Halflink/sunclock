@@ -1,6 +1,7 @@
 # SUNCLOCK
 
 ---
+![sunclock](./doc/completedproject.jpg)
 <p>I got the idea for this clock when I was looking for a project in which I could experiment with a segment display.</p> 
 <p>To make it more interesting I wanted to display the sunrise and sunset too. To do this I looked for a spherical 
 neopixel strip. So this clock will show the local time, the sunset and sunrise. Onm top of that I added a oled display 
@@ -18,6 +19,7 @@ the structure of this json file:
 {
   "secrets": [
     {
+      "id": 0,
       "ssid": "acme_guest_wifi",
       "password": "something something something darkside"
     }
@@ -37,10 +39,14 @@ When a connection succeeded, the clock will show the WIFI symbol on the right of
 As a WIFI connection is established, the clock will try to get the current local time using worldtimeapi.org.
 The settings for this part can be found in [settings.json](./settings.json):
 ```json
-"rtc_url": "http://worldtimeapi.org/api/timezone/Europe/Amsterdam"
+"rtc": {
+    "url": "http://worldtimeapi.org/api/timezone/Europe/Amsterdam",
+    "evaluate_interval": 86400
+  }
 ```
 Make sure you use a timezone for your local time as micropython has no option to calculate UTC to local time. See 
-[WorldTimeAPI](https://worldtimeapi.org/pages/examples) for more information.
+[WorldTimeAPI](https://worldtimeapi.org/pages/examples) for more information.<br>
+With the evaluation_interval setting you can set the number of seconds that has to be passed to calibrate the RTC with internet again. 
 
 ### 3. GET SUNRISE & SUNSET
 Next the clock will get the current sunrise and sunset times. The clock will invoke the api when it has no valid sunset or a sunset from the previous day or older.  
@@ -65,6 +71,7 @@ You can find the settings in [settings.json](./settings.json).
 - <b>formatted (integer):</b> 0 or 1 (1 is default). Time values in response will be expressed following ISO 8601 and day_length will be expressed in seconds. Optional.
 - <b>tzid (string):</b> A timezone identifier, like for example: UTC, Africa/Lagos, Asia/Hong_Kong, or Europe/Lisbon. The list of valid identifiers is available in this List of Supported Timezones. Required as micropython cannot calculate UTC to local time.
 
+Note that in a later stadium the "today" setting on date is overruled by the current date bij the program.
 ### 4. SHOW TIME ON SEGMENT DISPLAY
 
 ### 5. SHOW SUN ON NEOPIXEL
@@ -98,4 +105,5 @@ sensor Make sure you use the DHT22 and not the DHT11.
 ---
 ## BUILDING THE CLOCK
 
+![all components](./doc/allcomponents.jpg)
 
